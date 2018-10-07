@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load urlify %}
+
+{% block head_title %}
+    {{ instance.title}} | {{ block.super}}
+{% endblock head_title %}
+
+<!--<style>-->
+<!--{% block style %}-->
+<!--h1{-->
+    <!--color: red;-->
+<!--}-->
+<!--{% endblock style %}-->
+<!--</style>-->
+{% block content %}
+    <div class='col-sm-6 col-sm-offset-3'>
+        {% if instance.image %}
+            <img src='{{ instance.image.url }}' class="img-responsive"/>
+        {% endif %}
+        {{ title }}<h3><small>{% if instance.draft %} <span style="color: red;">Draft</span>{% endif %}{{ instance.timestamp}}</small></h3></h1>
+         <!--<small>{{ instance.timestamp}}</small><br>-->
+         {% if instance.user.get_full_name %}
+             Author : {{ instance.user.get_full_name}}</br>
+         {% endif %}
+
+
+       <!--  <p><div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="button_count"
+                data-action="like"  data-show-faces="true" data-share="true"></div>
+        <hr/>
+        </p> -->
+
+        <!--<p><a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri}}">-->
+            <!--Facebook</a>-->
+            <!--<a href="https://twitter.com/home?status={{ instance.text|truncatechars:80|urlify}}%20{{ request.build_absolute_uri}}">-->
+            <!--Twitter</a>-->
+            <!--<a href='https://plus.google.com/share?url={{ request.build_absolute_uri}}'>Google+</a>-->
+            <!--<a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri}}&title={{ instance.title}}&summary={{ instance.text|truncatechars:80|urlify}}&source={{ request.build_absolute_uri}}">-->
+            <!--Linkedin</a>-->
+            <!--<a href="http://www.reddit.com/submit?url={{ request.build_absolute_uri}}&title={{ instance.title}}">Reddit</a>-->
+        <!--</p>-->
+        <br/>
+        <div class="row">
+        <div class="col-sm-12">
+         {{ instance.text}}
+         <hr/>
+         <br/>
+
+         <p><a href="{{instance.get_absolute_url }}addlike/"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a> Likes: {{ instance.likes }}</p>
+        <!-- <div class="fb-comments" data-href="{{ request.build_absolute_uri}}" data-numposts="5"></div> -->
+
+        {% block comment %}
+        {% with comments.count as total_comments %}
+        <h2>
+            {{ total_comments }} comment{{ total_comments|pluralize }}
+        </h2>
+        {% endwith %}
+
+        {% for comment in comments %}
+             <div class="comment">
+                 <p class="info">
+                <!-- Comment {{ forloop.counter }} by {{ comment.comment_author }}
+                 {{ comment.comment_date }} -->
+                </p>
+                 {{ comment.comment_text|linebreaks }}
+            </div>
+            {% empty %}
+            <p>There are no comments yet.</p>
+        {% endfor %}
+
+        {% if new_comment %}
+            <h2>Your comment has been added.</h2>
+        {% else %}
+            {% if request.user.is_authenticated %}
+        <h2>Add a new comment</h2>
+        <form action="/posts/addcomment/{{instance.id}}/" method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            {{form1}}
+            <p><input type="submit" value="Add comment"></p>
+        </form>
+            {% endif %}
+        {% endif %}
+        {% endblock %}
+<!--<a href="https://www.facebook.com/sharer/sharer.php?u=http://CodingForEntrepreneurs.com/">-->
+<!--Facebook</a>-->
+<!--<a href="https://twitter.com/home?status=I'm%20going%20to%20learn%20to%20Code...%20Come%20build%20an%20web%20apsp%20with%20me!%20%23CFE%20and%20@justinmitchel%20http://codingforentrepreneurs.com/">-->
+<!--Twitter</a>-->
+<!--<a href='https://plus.google.com/share?url=http://codingforentrepreneurs.com'>Google+</a>-->
+<!--<a href="https://www.linkedin.com/shareArticle?mini=true&url=http://swiftforentrepreneurs.com/&title=Be%20first%20%7C%20Join%20Swift%20for%20Entrepreneurs&summary=Swift%20for%20Entrepreneurs%20is%20a%20project-based%20programming%20course%20for%20non-technical%20founders.%20We'll%20learn%20how%20to%20build%20iOS%20apps%20from%20scratch%20using%20Apple's%20new%20programming%20language:%20Swift.%20Be%20first%20and%20learn%20with%20me!&source=http://swiftforentrepreneurs.com/">-->
+<!--Linkedin</a>-->
+<!--<a href="http://www.reddit.com/submit?url=http://swiftforentrepreneurs.com/&title=Unlock%20to%20Learn%20Swift%20for%20Free!%20By%20Swift%20for%20Entrepreneurs.%20Made%20for%20Non%20Techincals.">Reddit</a>-->
+
+         <!--{{ instance.updated}}</br>-->
+        </div>
+        </div>
+        </div>
+{% endblock content %}
+
+<!--&lt;!&ndash;DOCTYPE html&ndash;&gt;-->
+<!--<html>-->
+
+    <!--<body>-->
+        <!--{% if messages %}-->
+            <!--<ul class="messages">-->
+                <!--{% for message in messages %}-->
+                    <!--<li {% if message.tags %} class="{{ message.tags}}" {%endif %}}>{{message}}</li>-->
+                <!--{% endfor %}-->
+            <!--</ul>-->
+        <!--{% endif %}-->
+
+
+        <!--<h1>{{ title }}</h1>-->
+        <!--{{ instance.id}}</br>-->
+        <!--{{ instance.author}}</br>-->
+        <!--{{ instance.title}}</br>-->
+        <!--{{ instance.text}}</br>-->
+        <!--{{ instance.updated}}</br>-->
+        <!--{{ instance.timestamp}}</br>-->
+
+        <!--<hr>-->
+    <!--</body>-->
+
+<!--</html>-->
